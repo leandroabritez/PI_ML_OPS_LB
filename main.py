@@ -73,5 +73,5 @@ def developer(developer: str):
         # Si no hay registros, crear un DataFrame vacío
         result_df = pd.DataFrame(columns=['año', 'cantidad de items', 'contenido free'])
 
-    return print(result_df)
+    return result_df.to_json(orient='records')
 

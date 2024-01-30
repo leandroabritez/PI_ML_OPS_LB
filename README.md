@@ -35,3 +35,12 @@ Se realiza un analisis golbal, mostrando los encabezados de los dataframes para 
 
 Identificar los diferentes endpoints que me piden, para analizar las columnas necesarias y descartar las que no se usen. Para de esta forma trabajar con archivos más livianos. 
 De igual forma, verificar antes de eliminar las columnas, que ninguna de ellas sea de aparente utilidad para los endpoints que son entrenados con machine learning. 
+
+## Endpoints
+
+Se realizaron archivos indepentientes para cada endpoint, tanto los .csv que se requiere leer en cada caso, como así también los scrips de prueba para verificar el funcionamiento de cada uno. 
+
+Una vez verificado, se estrutucturan todos dentro del archivo main.py que utiliza FastAPI y render para levantar cada una de las funciones.
+
+### developer
+
