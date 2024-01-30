@@ -33,7 +33,7 @@ def PlayTimeGenre(genero: str):
 @app.get("/developer/{developer}")
 def developer(developer: str):
 
-    data = pd.read_csv('../PI_ML_OPS_data util/steam_games.csv')
+    data = pd.read_csv('steam_games.csv')
 
     # Filtrar por el desarrollador
     developer_data = data[data['developer'] == developer]
