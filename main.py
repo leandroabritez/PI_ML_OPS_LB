@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import pandas as pd
+from fastapi.responses import JSONResponse
+
 
 app = FastAPI()
 
@@ -75,10 +77,11 @@ def developer(developer: str):
 
     return result_df.to_json(orient='records')
 
+
 # Definir la función userdata
 @app.get("/userdata/{userdata}")
 def userdata(user_id):
-    # Leer el archivo result_file.csv
+    # Leer el archivo ef_userdata.csv
     result_df = pd.read_csv('def_userdata.csv')
 
     # Filtrar el DataFrame para el usuario específico
@@ -86,12 +89,12 @@ def userdata(user_id):
 
     # Verificar si el usuario existe
     if user_data.empty:
-        return {"error": "Usuario no encontrado"}
+        return JSONResponse(content={"error": "Usuario no encontrado"}, status_code=404)
 
-    # Obtener los valores requeridos
-    dinero_gastado = user_data['sum_price'].values[0]
-    recomendacion_pct = user_data['recommend_percentage'].values[0]
-    cantidad_items = user_data['count_item'].values[0]
+    # Obtener los valores requeridos y convertir de numpy.int64 a tipos nativos de Python
+    dinero_gastado = float(user_data['sum_price'].values[0])
+    recomendacion_pct = float(user_data['recommend_percentage'].values[0])
+    cantidad_items = int(user_data['count_item'].values[0])
 
     # Formatear el porcentaje de recomendación
     recomendacion_pct_str = f"{recomendacion_pct * 1:.2f}%"
@@ -104,4 +107,7 @@ def userdata(user_id):
         "cantidad de items": cantidad_items
     }
 
-    return result_dict
+    # Utilizar JSONResponse para manejar la serialización
+    return JSONResponse(content=result_dict)
+
+
