@@ -75,3 +75,33 @@ def developer(developer: str):
 
     return result_df.to_json(orient='records')
 
+# Definir la función userdata
+@app.get("/userdata/{userdata}")
+def userdata(user_id):
+    # Leer el archivo result_file.csv
+    result_df = pd.read_csv('def_userdata.csv')
+
+    # Filtrar el DataFrame para el usuario específico
+    user_data = result_df[result_df['user_id'] == user_id]
+
+    # Verificar si el usuario existe
+    if user_data.empty:
+        return {"error": "Usuario no encontrado"}
+
+    # Obtener los valores requeridos
+    dinero_gastado = user_data['sum_price'].values[0]
+    recomendacion_pct = user_data['recommend_percentage'].values[0]
+    cantidad_items = user_data['count_item'].values[0]
+
+    # Formatear el porcentaje de recomendación
+    recomendacion_pct_str = f"{recomendacion_pct * 1:.2f}%"
+
+    # Construir el diccionario de resultados
+    result_dict = {
+        "Usuario X": user_id,
+        "Dinero gastado": f"{dinero_gastado:.2f} USD",
+        "% de recomendación": recomendacion_pct_str,
+        "cantidad de items": cantidad_items
+    }
+
+    return result_dict
