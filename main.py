@@ -111,3 +111,30 @@ def userdata(user_id):
     return JSONResponse(content=result_dict)
 
 
+# Definir la función userforgenre
+@app.get("/UserForGenre/{UserForGenre}")
+def UserForGenre(genero: str):
+    # Convertir el género a minúsculas
+    genero = genero.lower()
+
+    # Cargar el archivo def_userforgenre.csv
+    def_userforgenre = pd.read_csv('def_userforgenre.csv')
+
+    # Filtrar el DataFrame por el género dado
+    genre_data = def_userforgenre[def_userforgenre['Genre'].str.lower() == genero]
+
+    if not genre_data.empty:
+        # Encontrar el usuario con más horas jugadas
+        max_user = genre_data.loc[genre_data['horas_year'].idxmax()]['User_id']
+
+        # Obtener las horas jugadas por año
+        horas_por_año = eval(genre_data.loc[genre_data['User_id'] == max_user, 'horas_year'].iloc[0])
+
+        # Construir el resultado final
+        resultado = {
+            "Usuario con más horas jugadas para Género " + genero.capitalize(): max_user,
+            "Horas jugadas": horas_por_año
+        }
+        return resultado
+    else:
+        return {"Mensaje": "No se encontraron datos para el género proporcionado."}
