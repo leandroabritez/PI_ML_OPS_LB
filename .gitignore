@@ -2,8 +2,9 @@
 user_item_mapping.csv
 user_items.csv
 user_item_genre.csv
+user_reviews.csv
+user_recommend_percentage.csv
+steam_games_clean.csv
 steam_games_with_total_price.csv
 sumatoria_horas_por_item.csv
-user_recommend_percentage.csv
 Diccionario de Datos STEAM.xlsx
-steam_games_clean.csv
