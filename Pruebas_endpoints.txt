@@ -1,0 +1,10 @@
+/play_time_genre/{genero} 
+Action
+/developer/{developer}
+Retro Army Limited
+/userdata/{userdata}
+76561197970982479
+/UserForGenre/{UserForGenre}
+Action
+/recomendacion_juego/{input_game_id}
+761140
