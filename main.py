@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import pandas as pd
 from fastapi.responses import JSONResponse
-
+from sklearn.metrics.pairwise import cosine_similarity
 
 app = FastAPI()
 
@@ -9,7 +9,7 @@ app = FastAPI()
 @app.get("/play_time_genre/{genero}")
 def PlayTimeGenre(genero: str):
     # Cargar el DataFrame resultante del proceso anterior
-    result_grouped = pd.read_csv('PlayTimeGenre.csv')
+    result_grouped = pd.read_csv('def_PlayTimeGenre.csv')
 
     # Filtrar por el género específico
     genre_data = result_grouped[result_grouped['genres'] == genero]
@@ -138,3 +138,26 @@ def UserForGenre(genero: str):
         return resultado
     else:
         return {"Mensaje": "No se encontraron datos para el género proporcionado."}
+
+# Definir la función recomendacion_juego
+@app.get("/recomendacion_juego/{recomendacion_juego}")
+def recomendacion_juego(input_id, num_recommendations=5):
+    # Cargar el DataFrame
+    df = pd.read_csv('def_recommend_games.csv')
+
+    # Llenar valores NaN con 0
+    df_filled = df.fillna(0)
+
+    # Encontrar el índice del juego de entrada en el DataFrame
+    input_index = df.index[df['id'] == input_id].tolist()[0]
+
+    # Calcular la similitud del coseno entre el juego de entrada y todos los demás juegos
+    similarity_scores = cosine_similarity(df_filled.iloc[input_index, 5:].values.reshape(1, -1), df_filled.iloc[:, 5:])
+
+    # Obtener los índices de los juegos más similares
+    similar_game_indices = similarity_scores.argsort()[0][-num_recommendations-1:-1][::-1]
+
+    # Obtener los títulos de los juegos más similares
+    recommendations = df.iloc[similar_game_indices]['title'].tolist()
+
+    return recommendations
