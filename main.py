@@ -140,8 +140,8 @@ def UserForGenre(genero: str):
         return {"Mensaje": "No se encontraron datos para el género proporcionado."}
 
 # Definir la función recomendacion_juego
-@app.get("/recomendacion_juego/{recomendacion_juego}")
-def recomendacion_juego(input_id, num_recommendations=5):
+@app.get("/recomendacion_juego/{input_game_id}")
+def recomendacion_juego(input_game_id: int, num_recommendations: int = 5):
     # Cargar el DataFrame
     df = pd.read_csv('def_recommend_games.csv')
 
@@ -150,7 +150,11 @@ def recomendacion_juego(input_id, num_recommendations=5):
     df_filled['id'] = df_filled['id'].astype(int)
 
     # Encontrar el índice del juego de entrada en el DataFrame
-    input_index = df.index[df['id'] == input_id].tolist()[0]
+    input_indices = df.index[df['id'] == input_game_id].tolist()
+    if not input_indices:
+        return {"error": f"No se encontró ningún juego con el ID {input_game_id}"}
+    
+    input_index = input_indices[0]
 
     # Calcular la similitud del coseno entre el juego de entrada y todos los demás juegos
     similarity_scores = cosine_similarity(df_filled.iloc[input_index, 5:].values.reshape(1, -1), df_filled.iloc[:, 5:])
