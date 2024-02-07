@@ -147,6 +147,7 @@ def recomendacion_juego(input_id, num_recommendations=5):
 
     # Llenar valores NaN con 0
     df_filled = df.fillna(0)
+    df_filled['id'] = df_filled['id'].astype(int)
 
     # Encontrar el índice del juego de entrada en el DataFrame
     input_index = df.index[df['id'] == input_id].tolist()[0]
